@@ -5,8 +5,6 @@ A community where young people in Nigeria learn job skills, earn naira doing sma
 **Live demo:** https://blobis607.github.io/earn-while-you-learn/
 **Demo video:** _add your YouTube link here_
 
-![Home page](screenshots/home.png)
-
 ## The problem
 
 Many young Nigerians want digital skills but can't afford to spend months learning without earning. Even after learning, they have no work history to show employers. Meanwhile, small businesses need simple digital work, like flyers, spreadsheets and social media posts, but can't afford agencies.
@@ -29,9 +27,6 @@ Many young Nigerians want digital skills but can't afford to spend months learni
 Applying for a task updates the earnings and XP on your profile. Your profile is saved in your browser with `localStorage`.
 
 > All people, tasks and amounts are sample data. No real payments happen in this prototype.
-
-![Paid tasks](screenshots/paid-tasks.png)
-![Profile](screenshots/profile.png)
 
 ## Built with
 
@@ -60,7 +55,6 @@ The site works on phones and supports light and dark mode.
 ```
 earn-while-you-learn/
 ├── index.html      # the whole app: layout, styles and scripts
-├── screenshots/    # images used in this README
 ├── README.md
 └── LICENSE
 ```
