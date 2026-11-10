@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Earn While You Learn</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky app bar + four hash-routed views (home, community, tasks, profile) in one centred column */
+:root{
+  --bg:#F5F7F2; --surface:#FFFFFF; --fg:#13261D; --muted:#5B6B62; --line:#DDE5DC;
+  --brand:#0E5A3A; --brand-ink:#FFFFFF; --gold:#E9A23B; --gold-soft:#FBEBD0; --green-soft:#DDEFE4;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1712; --surface:#15231B; --fg:#E7F0EA; --muted:#9DB0A5; --line:#24372C;
+  --brand:#3FB27F; --brand-ink:#08130D; --gold:#F0B55A; --gold-soft:#3A2D16; --green-soft:#173326; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1712; --surface:#15231B; --fg:#E7F0EA; --muted:#9DB0A5; --line:#24372C;
+  --brand:#3FB27F; --brand-ink:#08130D; --gold:#F0B55A; --gold-soft:#3A2D16; --green-soft:#173326; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.02em;color:var(--fg);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--brand-ink);font-size:15px}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none;font-weight:500;padding:7px 12px;border-radius:999px}
+nav a[aria-current="page"]{background:var(--green-soft);color:var(--fg)}
+nav a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+main{padding-block:28px 56px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(32px,6vw,54px);line-height:1.05;font-weight:800}
+h2{font-size:26px;font-weight:800}
+h3{font-size:17px;font-weight:600}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:600;color:var(--brand)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 18px;cursor:pointer;background:var(--brand);color:var(--brand-ink)}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.small{padding:7px 12px;font-size:14px}
+.btn[disabled]{opacity:.6;cursor:default}
+.demo-note{background:var(--gold-soft);border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:20px}
+/* home */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+.hero > *{min-width:0}
+.hero p.lead{font-size:18px;margin-block:16px 22px;max-width:52ch}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap}
+.wallet{background:var(--brand);color:var(--brand-ink);border-radius:18px;padding:22px;display:grid;gap:14px}
+.wallet .amt{font-family:var(--display);font-size:40px;font-weight:800;font-variant-numeric:tabular-nums}
+.wallet ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.wallet li{display:flex;justify-content:space-between;gap:10px;font-size:14px;border-top:1px solid color-mix(in srgb,var(--brand-ink) 22%,transparent);padding-top:8px}
+.wallet li span:last-child{font-variant-numeric:tabular-nums;font-weight:600}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:6px;align-content:start}
+.step .n{font-family:var(--display);font-weight:800;color:var(--gold);font-size:22px}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:36px}
+.stats div{display:grid}
+.stats strong{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+/* lists */
+.head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.who{display:flex;gap:10px;align-items:center}
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:600;background:var(--green-soft);color:var(--fg);flex:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:500;padding:3px 9px;border-radius:999px;background:var(--green-soft)}
+.chip.gold{background:var(--gold-soft)}
+.pay{font-family:var(--display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.composer{display:flex;gap:8px;margin-bottom:14px}
+.composer input{flex:1;min-width:0}
+input,textarea,select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.like{font:inherit;font-size:13px;background:none;border:0;color:var(--muted);cursor:pointer;padding:0}
+/* profile */
+.profile{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+.profile > *{min-width:0}
+.big-av{width:72px;height:72px;font-size:26px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:var(--bg);border-radius:10px;padding:10px;display:grid}
+.kpi strong{font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+.bar-track{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:var(--gold)}
+form.edit{display:grid;gap:10px}
+label{font-size:13px;font-weight:600;display:grid;gap:4px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:500}
+@media (max-width:760px){
+  .hero,.profile{grid-template-columns:1fr}
+  .steps,.grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){.card,.btn{transition:transform .15s}.btn:hover:not([disabled]){transform:translateY(-1px)}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap bar">
+  <a class="logo" href="#home"><b>₦</b>Earn While You Learn</a>
+  <nav aria-label="Main">
+    <a href="#home">Home</a><a href="#tasks">Paid tasks</a><a href="#community">Community</a><a href="#profile">My profile</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <p class="demo-note">Prototype for the CTRL-V Hackathon. All people, tasks and amounts are sample data.</p>
+
+  <section id="v-home">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Learn a skill · Do real work · Get paid</p>
+        <h1 style="margin-top:10px">Your first paycheque can start in the classroom.</h1>
+        <p class="lead muted">Earn While You Learn is a community for young people in Nigeria. Take short lessons in skills businesses need, then earn naira doing small paid tasks for them. Every task you finish builds your profile.</p>
+        <div class="cta"><a class="btn" href="#tasks" style="text-decoration:none">Browse paid tasks</a><a class="btn ghost" href="#profile" style="text-decoration:none">Set up my profile</a></div>
+      </div>
+      <div class="wallet" aria-label="Example learner wallet">
+        <div><p style="font-size:13px;opacity:.85">Example: Amaka's earnings this month</p><p class="amt">₦38,500</p></div>
+        <ul>
+          <li><span>Designed 3 flyers · Mama Put Kitchen</span><span>₦15,000</span></li>
+          <li><span>Typed 40 receipts into a spreadsheet</span><span>₦8,000</span></li>
+          <li><span>Tutored 2 learners in Canva</span><span>₦6,000</span></li>
+          <li><span>Finished "Social Media Basics" course</span><span>₦9,500</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 style="margin-top:48px">How it works</h2>
+    <div class="steps" style="margin-top:16px">
+      <div class="step"><span class="n">1</span><h3>Learn</h3><p class="muted">Free 10-minute lessons that work on a phone and use little data. Graphic design, data entry, social media, basic coding.</p></div>
+      <div class="step"><span class="n">2</span><h3>Earn</h3><p class="muted">Local businesses post small paid tasks. Pass a skill quiz to unlock the tasks for that skill, then get paid in naira when the business approves your work.</p></div>
+      <div class="step"><span class="n">3</span><h3>Grow</h3><p class="muted">Your profile shows your skills, ratings and finished work. Help learners to earn tutoring fees and badges.</p></div>
+    </div>
+    <div class="stats" aria-label="Sample community numbers">
+      <div><strong>1,240</strong><span class="muted">learners (sample)</span></div>
+      <div><strong>86</strong><span class="muted">local businesses</span></div>
+      <div><strong>₦4.2M</strong><span class="muted">paid to learners</span></div>
+    </div>
+  </section>
+
+  <section id="v-tasks" hidden>
+    <div class="head">
+      <div><p class="eyebrow">Paid tasks</p><h2>Work you can do this week</h2></div>
+      <div class="filters" id="filters" role="group" aria-label="Filter tasks by skill"></div>
+    </div>
+    <div class="grid" id="task-list"></div>
+  </section>
+
+  <section id="v-community" hidden>
+    <div class="head"><div><p class="eyebrow">Community</p><h2>Learners helping learners</h2></div></div>
+    <form class="composer" id="post-form">
+      <input id="post-input" placeholder="Share a win or ask a question…" aria-label="New post" maxlength="240">
+      <button class="btn" type="submit">Post</button>
+    </form>
+    <div class="grid" id="feed"></div>
+  </section>
+
+  <section id="v-profile" hidden>
+    <div class="profile">
+      <div class="card">
+        <div class="who"><div class="av big-av" id="p-av">?</div><div><h2 id="p-name" style="font-size:22px"></h2><p class="muted" id="p-place"></p></div></div>
+        <p id="p-bio"></p>
+        <div class="chips" id="p-skills"></div>
+        <div class="kpis">
+          <div class="kpi"><strong id="p-earned">₦0</strong><span>Earned</span></div>
+          <div class="kpi"><strong id="p-done">0</strong><span>Tasks done</span></div>
+          <div class="kpi"><strong id="p-lessons">0</strong><span>Lessons</span></div>
+        </div>
+        <div style="display:grid;gap:6px"><div class="row"><span style="font-size:13px;font-weight:600">Level 1 · Starter</span><span class="muted" style="font-size:13px" id="p-xp"></span></div><div class="bar-track"><div class="bar-fill" id="p-bar" style="width:0%"></div></div></div>
+        <div class="chips" id="p-badges"></div>
+      </div>
+      <div class="card">
+        <h3>Edit your profile</h3>
+        <p class="muted" style="font-size:14px">This is a demo, so your profile is only saved in this browser.</p>
+        <form class="edit" id="profile-form">
+          <label for="f-name">Full name<input id="f-name" required maxlength="40"></label>
+          <label for="f-place">City<input id="f-place" maxlength="40"></label>
+          <label for="f-bio">About you<textarea id="f-bio" rows="3" maxlength="200"></textarea></label>
+          <label for="f-skills">Skills you're learning (comma separated)<input id="f-skills" maxlength="120"></label>
+          <div><button class="btn" type="submit">Save profile</button></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+const TASKS=[
+ {id:1,title:"Design a menu flyer for a food stall",biz:"Mama Put Kitchen, Yaba",skill:"Design",pay:5000,time:"2 hrs"},
+ {id:2,title:"Type 50 handwritten receipts into Google Sheets",biz:"Ade Pharmacy, Ibadan",skill:"Data entry",pay:6000,time:"3 hrs"},
+ {id:3,title:"Write 5 Instagram captions for a fashion shop",biz:"Zara Stitches, Abuja",skill:"Social media",pay:4000,time:"1 hr"},
+ {id:4,title:"Fix the contact form on a one-page website",biz:"Okafor Auto Parts, Onitsha",skill:"Coding",pay:10000,time:"3 hrs"},
+ {id:5,title:"Make a price list poster for a phone shop",biz:"Gadget Hub, Port Harcourt",skill:"Design",pay:4500,time:"2 hrs"},
+ {id:6,title:"Translate a product leaflet into Yoruba",biz:"FarmFresh Co-op, Oyo",skill:"Writing",pay:7000,time:"2 hrs"}];
+const POSTS=[
+ {n:"Amaka O.",c:"Enugu",t:"Got my first ₦5,000 for a flyer design! Took the Canva lesson twice before the quiz. Don't give up.",l:24},
+ {n:"Tunde B.",c:"Lagos",t:"Anyone free to explain VLOOKUP? I'll pay the ₦1,500 tutoring fee for a 20-minute call.",l:9},
+ {n:"Halima S.",c:"Kano",t:"Just reached Level 3 and unlocked the coding tasks. The website fix task was hard but I learned so much.",l:31},
+ {n:"Chidi E.",c:"Owerri",t:"Tip: take screenshots of your finished tasks so your profile looks strong for bigger jobs.",l:17}];
+let applied=new Set(), filter="All", liked=new Set();
+const $=id=>document.getElementById(id);
+const naira=n=>"₦"+n.toLocaleString("en-NG");
+const initials=s=>s.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
+const esc=s=>s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2200)}
+
+function renderFilters(){
+  const skills=["All",...new Set(TASKS.map(t=>t.skill))];
+  $("filters").innerHTML=skills.map(s=>`<button type="button" aria-pressed="${s===filter}" data-s="${s}">${s}</button>`).join("");
+}
+function renderTasks(){
+  const list=TASKS.filter(t=>filter==="All"||t.skill===filter);
+  $("task-list").innerHTML=list.map(t=>`<article class="card">
+    <div class="row"><span class="chip">${t.skill}</span><span class="muted" style="font-size:13px">~${t.time}</span></div>
+    <h3>${t.title}</h3><p class="muted" style="font-size:14px">${t.biz}</p>
+    <div class="row"><span class="pay">${naira(t.pay)}</span>
+    <button class="btn small" data-id="${t.id}" ${applied.has(t.id)?"disabled":""}>${applied.has(t.id)?"Applied ✓":"Apply for task"}</button></div></article>`).join("");
+}
+$("filters").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;filter=b.dataset.s;renderFilters();renderTasks()});
+$("task-list").addEventListener("click",e=>{const b=e.target.closest("button[data-id]");if(!b)return;applied.add(+b.dataset.id);renderTasks();toast("Applied. The business will reply in your messages.")});
+
+function renderFeed(){
+  $("feed").innerHTML=POSTS.map((p,i)=>`<article class="card">
+    <div class="who"><div class="av">${initials(p.n)}</div><div><strong>${esc(p.n)}</strong><p class="muted" style="font-size:13px">${esc(p.c)}</p></div></div>
+    <p>${esc(p.t)}</p><button class="like" data-i="${i}" aria-pressed="${liked.has(i)}">${liked.has(i)?"♥":"♡"} ${p.l+(liked.has(i)?1:0)} likes</button></article>`).join("");
+}
+$("feed").addEventListener("click",e=>{const b=e.target.closest(".like");if(!b)return;const i=+b.dataset.i;liked.has(i)?liked.delete(i):liked.add(i);renderFeed()});
+$("post-form").addEventListener("submit",e=>{e.preventDefault();const v=$("post-input").value.trim();if(!v)return;
+  POSTS.unshift({n:profile.name||"You",c:profile.place||"",t:v,l:0});liked=new Set([...liked].map(i=>i+1));$("post-input").value="";renderFeed();toast("Posted")});
+
+const DEFAULT={name:"Blessing D.",place:"Lagos",bio:"Second-year student learning design and spreadsheets. Saving up for a laptop.",skills:"Design, Data entry"};
+let profile={...DEFAULT};
+try{const s=JSON.parse(localStorage.getItem("ewyl-profile")||"null");if(s)profile={...DEFAULT,...s}}catch(e){}
+function renderProfile(){
+  $("p-av").textContent=initials(profile.name);$("p-name").textContent=profile.name;$("p-place").textContent=profile.place;
+  $("p-bio").textContent=profile.bio;
+  $("p-skills").innerHTML=profile.skills.split(",").map(s=>s.trim()).filter(Boolean).map(s=>`<span class="chip">${esc(s)}</span>`).join("");
+  const earned=[...applied].reduce((a,id)=>a+TASKS.find(t=>t.id===id).pay,0);
+  $("p-earned").textContent=naira(earned);$("p-done").textContent=applied.size;$("p-lessons").textContent=3;
+  const xp=60+applied.size*40;$("p-xp").textContent=`${Math.min(xp,200)} / 200 XP`;$("p-bar").style.width=Math.min(100,xp/2)+"%";
+  $("p-badges").innerHTML=`<span class="chip gold">First lesson</span><span class="chip gold">Quiz passed: Design</span>${applied.size?'<span class="chip gold">First task</span>':""}`;
+  $("f-name").value=profile.name;$("f-place").value=profile.place;$("f-bio").value=profile.bio;$("f-skills").value=profile.skills;
+}
+$("profile-form").addEventListener("submit",e=>{e.preventDefault();
+  profile={name:$("f-name").value.trim()||DEFAULT.name,place:$("f-place").value.trim(),bio:$("f-bio").value.trim(),skills:$("f-skills").value};
+  try{localStorage.setItem("ewyl-profile",JSON.stringify(profile))}catch(e){}renderProfile();toast("Profile saved")});
+
+const VIEWS=["home","tasks","community","profile"];
+function route(){const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"home";
+  VIEWS.forEach(x=>$("v-"+x).hidden=x!==v);
+  document.querySelectorAll("nav a").forEach(a=>a.getAttribute("href")==="#"+v?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  if(v==="profile")renderProfile();window.scrollTo(0,0)}
+window.addEventListener("hashchange",route);
+renderFilters();renderTasks();renderFeed();renderProfile();route();
+</script>
+</body>
+</html>
